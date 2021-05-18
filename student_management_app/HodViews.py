@@ -613,6 +613,105 @@ def check_username_exist(request):
     else:
         return HttpResponse(False)
 
+def student_feedback_message(request):
+    feedbacks = FeedBackStudent.objects.all()
+    context = {
+        "feedbacks": feedbacks
+    }
+    return render(request, 'hod_template/student_feedback_template.html', context)
+
+
+@csrf_exempt
+def student_feedback_message_reply(request):
+    feedback_id = request.POST.get('id')
+    feedback_reply = request.POST.get('reply')
+
+    try:
+        feedback = FeedBackStudent.objects.get(id=feedback_id)
+        feedback.feedback_reply = feedback_reply
+        feedback.save()
+        return HttpResponse("True")
+
+    except:
+        return HttpResponse("False")
+
+
+def staff_feedback_message(request):
+    feedbacks = FeedBackStaffs.objects.all()
+    context = {
+        "feedbacks": feedbacks
+    }
+    return render(request, 'hod_template/staff_feedback_template.html', context)
+
+
+@csrf_exempt
+def staff_feedback_message_reply(request):
+    feedback_id = request.POST.get('id')
+    feedback_reply = request.POST.get('reply')
+
+    try:
+        feedback = FeedBackStaffs.objects.get(id=feedback_id)
+        feedback.feedback_reply = feedback_reply
+        feedback.save()
+        return HttpResponse("True")
+
+    except:
+        return HttpResponse("False")
+
+
+def student_leave_view(request):
+    leaves = LeaveReportStudent.objects.all()
+    context = {
+        "leaves": leaves
+    }
+    return render(request, 'hod_template/student_leave_view.html', context)
+
+def student_leave_approve(request, leave_id):
+    leave = LeaveReportStudent.objects.get(id=leave_id)
+    leave.leave_status = 1
+    leave.save()
+    return redirect('student_leave_view')
+
+
+def student_leave_reject(request, leave_id):
+    leave = LeaveReportStudent.objects.get(id=leave_id)
+    leave.leave_status = 2
+    leave.save()
+    return redirect('student_leave_view')
+
+
+def staff_leave_view(request):
+    leaves = LeaveReportStaff.objects.all()
+    context = {
+        "leaves": leaves
+    }
+    return render(request, 'hod_template/staff_leave_view.html', context)
+
+
+def staff_leave_approve(request, leave_id):
+    leave = LeaveReportStaff.objects.get(id=leave_id)
+    leave.leave_status = 1
+    leave.save()
+    return redirect('staff_leave_view')
+
+
+def staff_leave_reject(request, leave_id):
+    leave = LeaveReportStaff.objects.get(id=leave_id)
+    leave.leave_status = 2
+    leave.save()
+    return redirect('staff_leave_view')
+
+
+def admin_view_attendance(request):
+    subjects = Subjects.objects.all()
+    session_years = SessionYearModel.objects.all()
+    context = {
+        "subjects": subjects,
+        "session_years": session_years
+    }
+    return render(request, "hod_template/admin_view_attendance.html", context)
+
+
 @csrf_exempt
 def admin_get_attendance_dates(request):
     # Getting Values from Ajax POST 'Fetch Student'
