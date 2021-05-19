@@ -180,11 +180,13 @@ def create_user_profile(sender, instance, created, **kwargs):
         # Check the user_type and insert the data in respective tables
         if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type == 2:
+        if instance.user_type != 2:
+            pass
+        else:
             Staffs.objects.create(admin=instance)
         if instance.user_type == 3:
             Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", profile_pic="", gender="")
-    
+
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
@@ -194,6 +196,6 @@ def save_user_profile(sender, instance, **kwargs):
         instance.staffs.save()
     if instance.user_type == 3:
         instance.students.save()
-    
+
 
 
