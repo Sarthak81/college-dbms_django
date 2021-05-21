@@ -1,7 +1,7 @@
 
 from django.urls import path, include
 from . import views
-from .import HodViews, StudentViews
+from .import HodViews, StudentViews, StaffViews
 from django.contrib import admin
 
 urlpatterns = [
