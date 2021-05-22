@@ -180,9 +180,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         # Check the user_type and insert the data in respective tables
         if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type != 2:
-            pass
-        else:
+        if instance.user_type == 2:
             Staffs.objects.create(admin=instance)
         if instance.user_type == 3:
             Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", profile_pic="", gender="")

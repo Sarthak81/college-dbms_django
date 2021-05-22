@@ -196,8 +196,9 @@ def add_course_save(request):
             course_model.save()
             messages.success(request, "Course Added Successfully!")
             return redirect('add_course')
-        except:
+        except Exception as e:
             messages.error(request, "Failed to Add Course!")
+            print(e)
             return redirect('add_course')
 
 
@@ -346,9 +347,7 @@ def add_student_save(request):
             address = form.cleaned_data['address']
             session_year_id = form.cleaned_data['session_year_id']
             course_id = form.cleaned_data['course_id']
-            # print(course_id)
             gender = form.cleaned_data['gender']
-            # user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
 
             # Getting Profile Pic first
             # First Check whether the file is selected or not
@@ -358,8 +357,6 @@ def add_student_save(request):
                 fs = FileSystemStorage()
                 filename = fs.save(profile_pic.name, profile_pic)
                 profile_pic_url = fs.url(filename)
-                # am = Courses.objects.get(id=3)
-                # print(am)
             else:
                 profile_pic_url = None
 
@@ -369,19 +366,18 @@ def add_student_save(request):
                 user.students.address = address
 
                 course_obj = Courses.objects.get(id=course_id)
-                user.students.course_id = course_id
+                user.students.course_id = course_obj
 
                 session_year_obj = SessionYearModel.objects.get(id=session_year_id)
                 user.students.session_year_id = session_year_obj
 
                 user.students.gender = gender
                 user.students.profile_pic = profile_pic_url
-                # print(user.students.address + '\n' + user.students.course_id + '\n' + user.students.session_year_id + '\n' + user.students.gender + '\n' + user.students.profile_pic)
                 user.save()
                 messages.success(request, "Student Added Successfully!")
                 return redirect('add_student')
             except Exception as e:
-                messages.error(request, "Failed to Add Student! ")
+                messages.error(request, "Failed to Add Student!")
                 print(e)
                 return redirect('add_student')
         else:
