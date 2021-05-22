@@ -1,4 +1,4 @@
-<h1 align="center">FACE MASK DETECTOR</h1>
+<h1 align="center">College Database Management System</h1>
 <p align="center">
 </p>
 
